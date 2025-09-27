@@ -27,10 +27,12 @@ router.get("/:messageId", async (req, res) => {
   })
 
   if(message == null) return res.status(404).send("A mensagem não foi encontrada")
-  return res.status(200).send(message)
+  
+    return res.status(200).send(message)
 });
 
 router.post("/", async (req, res) => {
+  
   let {userId} = req.query
 
   let message = await models.Message.create({
@@ -42,6 +44,7 @@ router.post("/", async (req, res) => {
 });
 
 router.delete("/:messageId", async (req, res) => {
+  
   let id = req.params.messageId
 
   await models.Message.destroy({
@@ -54,6 +57,7 @@ router.delete("/:messageId", async (req, res) => {
 });
 
 router.put("/:messageId", async (req, res) => {
+  
   let id = req.params.messageId
 
   let message = await models.Message.findOne({
