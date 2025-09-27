@@ -41,13 +41,36 @@ router.post("/", async (req, res) => {
   return res.status(201).send(message);
 });
 
-router.delete("/:messageId", (req, res) => {
-  const { [req.params.messageId]: message, ...otherMessages } =
-    req.context.models.messages;
+router.delete("/:messageId", async (req, res) => {
+  let id = req.params.messageId
 
-  req.context.models.messages = otherMessages;
+  await models.Message.destroy({
+    where: {
+      id: id
+    }
+  })
 
-  return res.send(message);
+  return res.status(204).send();
+});
+
+router.put("/:messageId", async (req, res) => {
+  let id = req.params.messageId
+
+  let message = await models.Message.findOne({
+    where: {
+      id: id
+    }
+  })
+
+  if(message == null) return res.status(404).send()
+
+  message.set({
+    text: req.body.text
+  })
+
+  await message.save()
+
+  return res.status(200).send(message)
 });
 
 export default router;
