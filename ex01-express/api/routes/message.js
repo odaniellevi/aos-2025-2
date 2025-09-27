@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from "uuid";
 import { Router } from "express";
 import models from "../models";
+import { where } from "sequelize";
 
 const router = Router();
 
@@ -27,21 +27,18 @@ router.get("/:messageId", async (req, res) => {
   })
 
   if(message == null) return res.status(404).send("A mensagem não foi encontrada")
-
   return res.status(200).send(message)
 });
 
-router.post("/", (req, res) => {
-  const id = uuidv4();
-  const message = {
-    id,
+router.post("/", async (req, res) => {
+  let {userId} = req.query
+
+  let message = await models.Message.create({
     text: req.body.text,
-    userId: req.context.me.id,
-  };
+    userId: userId,
+  })
 
-  req.context.models.messages[id] = message;
-
-  return res.send(message);
+  return res.status(201).send(message);
 });
 
 router.delete("/:messageId", (req, res) => {
