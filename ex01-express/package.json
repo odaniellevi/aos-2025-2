@@ -11,7 +11,7 @@
     "express",
     "postgres"
   ],
-  "author": "Marcio Bueno",
+  "author": "Daniel Levi",
   "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.28.3",
