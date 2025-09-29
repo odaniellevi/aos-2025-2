@@ -1,6 +1,5 @@
 import { Router } from "express";
-import models from "../models";
-import { where } from "sequelize";
+import models from "../models/index.js";
 
 const router = Router();
 
@@ -17,24 +16,22 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:messageId", async (req, res) => {
-
   let id = req.params.messageId
-  
+
   let message = await models.Message.findOne({
     where: {
       id: id
     }
   })
 
-  if(message == null) return res.status(404).send("A mensagem não foi encontrada")
-  
-    return res.status(200).send(message)
+  if(message == null) return res.status(404).send("Mensagem não encontrada")
+
+  return res.status(200).send(message)
 });
 
 router.post("/", async (req, res) => {
-  
   let {userId} = req.query
-
+  
   let message = await models.Message.create({
     text: req.body.text,
     userId: userId,
@@ -43,8 +40,7 @@ router.post("/", async (req, res) => {
   return res.status(201).send(message);
 });
 
-router.delete("/:messageId", async (req, res) => {
-  
+router.delete("/:messageId",async (req, res) => {
   let id = req.params.messageId
 
   await models.Message.destroy({
@@ -56,10 +52,9 @@ router.delete("/:messageId", async (req, res) => {
   return res.status(204).send();
 });
 
-router.put("/:messageId", async (req, res) => {
-  
+router.put("/:messageId",async (req, res) => {
   let id = req.params.messageId
-
+  
   let message = await models.Message.findOne({
     where: {
       id: id
