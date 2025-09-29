@@ -8,6 +8,13 @@ import routes from "./routes/index.js";
 const app = express();
 app.set("trust proxy", true);
 
+app.get('/', (req, res) => {
+  res.json({ 
+    message: "API está funcionando! Bem-vindo.",
+    timestamp: new Date().toISOString() 
+  });
+});
+
 var corsOptions = {
   origin: ["http://example.com", "*"],
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
