@@ -36,6 +36,7 @@ app.use("/", routes.root);
 app.use("/session", routes.session);
 app.use("/users", routes.user);
 app.use("/messages", routes.message);
+app.use("/tarefas", routes.tarefa);
 
 const port = process.env.PORT ?? 3000;
 
@@ -43,7 +44,7 @@ const eraseDatabaseOnSync = process.env.ERASE_DATABASE === "true";
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   if (eraseDatabaseOnSync) {
-    createUsersWithMessages();
+    createInitialData();
   }
 
   app.listen(port, () => {
@@ -51,22 +52,19 @@ sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   });
 });
 
-const createUsersWithMessages = async () => {
+const createInitialData = async () => {
   await models.User.create(
     {
       username: "rwieruch",
       email: "rwieruch@email.com",
-      messages: [
-        {
-          text: "Published the Road to learn React",
-        },
-        {
-          text: "Published also the Road to learn Express + PostgreSQL",
-        },
+      messages: [{ text: "Published the Road to learn React" }],
+      Tarefas: [
+        { descricao: "Escrever capítulo sobre hooks" },
+        { descricao: "Revisar o código do app", concluida: true },
       ],
     },
     {
-      include: [models.Message],
+      include: [models.Message, models.Tarefa],
     }
   );
 
